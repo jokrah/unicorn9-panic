@@ -11,33 +11,33 @@ export default
     found: false
   methods:
     changeStatus: ->
-      if buttonText == "ACTIVATE"
+      if @buttonText == "ACTIVATE"
         await @$http.post "https://api-proxy.hashstax.de/projects/christoph/contexts/Stax_1/storage",
           account: true
         ,
-          'Originator-Ref': @privateKey
-        buttonText = "DEACTIVATE"
+          headers:
+            'Originator-Ref': @privateKey
+        @buttonText = "DEACTIVATE"
       else
         await @$http.post "https://api-proxy.hashstax.de/projects/christoph/contexts/Stax_1/storage",
           account: false
         ,
-        'Originator-Ref': @privateKey
-        buttonText = "ACTIVATE"
+          headers:
+            'Originator-Ref': @privateKey
+        @buttonText = "ACTIVATE"
       return
 
     statusUpdate: ->
       @loading = true
       try
-        #delay 3000, =>
-        #  @found = true
-        #  @loading = false
-        #  console.log = 'test'
-        response = await @$http.get "https://jsonplaceholder.typicode.com/posts" + "wdsfwefdw"
-        data = response.body.filter((el) -> el.userId == 10).pop()
-        console.log data
-        data =
-          account: true
-        @buttonText = if data.account == true then "DEACTIVATE" else "ACTIVATE"
+        response = await @$http.get "https://api-proxy.hashstax.de/projects/christoph/contexts/Stax_1/storage",
+          headers:
+            'Originator-Ref': @privateKey
+        data = response.body.pop()
+        @buttonText = if data.body.account == true then "DEACTIVATE" else "ACTIVATE"
+        delay 2000, => # cause of ux
+          @loading = false
+          @found = true
       catch
         @loading = false
       return
