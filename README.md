@@ -1,4 +1,4 @@
-# welterbe
+# unicorn
 
 ## Project setup
 ```
